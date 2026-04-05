@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Poppins", ui-sans-serif, system-ui, sans-serif;
+  
+  /* Custom Palette */
+  --color-primary-50: #f0f9f9;
+  --color-primary-100: #d1eded;
+  --color-primary-200: #a3dbdb;
+  --color-primary-300: #75c9c9;
+  --color-primary-400: #49abab;
+  --color-primary-500: #0fa3b1;
+  --color-primary-600: #0d8a96;
+  --color-primary-700: #0a6d77;
+  --color-primary-800: #08545c;
+  --color-primary-900: #20585b;
+  
+  --color-peach-50: #fff9f5;
+  --color-peach-100: #ffeedf;
+  --color-peach-200: #fde0c4;
+  --color-peach-300: #faceb8;
+  --color-peach-400: #f8b89a;
+  
+  --shadow-soft: 0 4px 20px -2px rgba(15, 163, 177, 0.1);
+  --shadow-glow: 0 0 15px rgba(15, 163, 177, 0.2);
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans antialiased min-h-screen transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-[1.5rem] p-5 border border-slate-100 transition-all duration-300 shadow-sm hover:shadow-md;
+  }
+  
+  .graph-shadow {
+    @apply shadow-[0_8px_30px_rgb(15,163,177,0.06)];
+  }
+  
+  .btn-primary {
+    @apply bg-primary-500 text-white font-black text-xs uppercase tracking-widest rounded-xl px-5 py-2.5 transition-all active:scale-95 shadow-lg shadow-primary-500/20 disabled:opacity-50 hover:bg-primary-600;
+  }
+  
+  .input-field {
+    @apply w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-primary-500/20 transition-all;
+  }
+
+  .neon-line {
+    filter: drop-shadow(0 0 8px rgba(15, 163, 177, 0.5));
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-200 rounded-full;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,225 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "name": { "type": "string" },
+        "avatar": { "type": "string" }
+      },
+      "required": ["id", "email", "name"]
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "Study subject",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "createdAt"]
+    },
+    "StudySession": {
+      "title": "StudySession",
+      "description": "A single study session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "subject": { "type": "string" },
+        "duration": { "type": "number" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "date": { "type": "string" }
+      },
+      "required": ["id", "subject", "duration", "startTime", "date"]
+    },
+    "Habit": {
+      "title": "Habit",
+      "description": "A habit to track",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "targetDays": { "type": "number", "enum": [15, 30, 45, 75] },
+        "active": { "type": "boolean" },
+        "history": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "category", "targetDays", "active", "history", "createdAt"]
+    },
+    "Note": {
+      "title": "Note",
+      "description": "Daily note with items",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "title": { "type": "string" },
+        "items": { "type": "array" },
+        "priority": { "type": "string", "enum": ["low", "medium", "high"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "date", "title", "items", "priority", "createdAt"]
+    },
+    "ImportantNote": {
+      "title": "ImportantNote",
+      "description": "Secure vault entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string" },
+        "tag": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "description", "date", "tag", "createdAt"]
+    },
+    "AcademicRecord": {
+      "title": "AcademicRecord",
+      "description": "Academic grade or record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["exam", "assignment", "class", "subject"] },
+        "subject": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "marks": { "type": "number" },
+        "totalMarks": { "type": "number" },
+        "grade": { "type": "number" },
+        "credits": { "type": "number" }
+      },
+      "required": ["id", "type", "subject", "title", "date", "grade", "credits"]
+    },
+    "HealthRecord": {
+      "title": "HealthRecord",
+      "description": "Daily health stats",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "exercise": { "type": "number" },
+        "sleepStart": { "type": "string" },
+        "sleepEnd": { "type": "string" },
+        "sleepDuration": { "type": "number" },
+        "water": { "type": "number" }
+      },
+      "required": ["id", "date", "exercise", "sleepDuration", "water"]
+    },
+    "WeeklySchedule": {
+      "title": "WeeklySchedule",
+      "description": "Class schedule item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "subject": { "type": "string" },
+        "day": { "type": "string", "enum": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] },
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" },
+        "room": { "type": "string" },
+        "type": { "type": "string", "enum": ["Class", "Lab", "Seminar", "Other"] },
+        "status": { "type": "string", "enum": ["pending", "completed"] }
+      },
+      "required": ["id", "subject", "day", "startTime", "endTime", "status"]
+    },
+    "SavingsGoal": {
+      "title": "SavingsGoal",
+      "description": "A financial goal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "targetAmount": { "type": "number" },
+        "currentAmount": { "type": "number" },
+        "category": { "type": "string" },
+        "deadline": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "targetAmount", "currentAmount", "category", "deadline", "createdAt"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Financial transaction",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["income", "expense"] },
+        "amount": { "type": "number" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string" }
+      },
+      "required": ["id", "type", "amount", "category", "description", "date"]
+    },
+    "LifeMoment": {
+      "title": "LifeMoment",
+      "description": "A moment in the life roadmap",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "location": { "type": "string" }
+      },
+      "required": ["id", "title", "date", "description", "category"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile"
+    },
+    "/users/{userId}/subjects/{subjectId}": {
+      "schema": "Subject",
+      "description": "User's study subjects"
+    },
+    "/users/{userId}/studySessions/{sessionId}": {
+      "schema": "StudySession",
+      "description": "User's study sessions"
+    },
+    "/users/{userId}/habits/{habitId}": {
+      "schema": "Habit",
+      "description": "User's habits"
+    },
+    "/users/{userId}/notes/{noteId}": {
+      "schema": "Note",
+      "description": "User's daily notes"
+    },
+    "/users/{userId}/importantNotes/{noteId}": {
+      "schema": "ImportantNote",
+      "description": "User's vault entries"
+    },
+    "/users/{userId}/academicRecords/{recordId}": {
+      "schema": "AcademicRecord",
+      "description": "User's academic records"
+    },
+    "/users/{userId}/healthRecords/{recordId}": {
+      "schema": "HealthRecord",
+      "description": "User's health records"
+    },
+    "/users/{userId}/weeklySchedules/{scheduleId}": {
+      "schema": "WeeklySchedule",
+      "description": "User's class schedule"
+    },
+    "/users/{userId}/savingsGoals/{goalId}": {
+      "schema": "SavingsGoal",
+      "description": "User's savings goals"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "User's financial transactions"
+    },
+    "/users/{userId}/lifeMoments/{momentId}": {
+      "schema": "LifeMoment",
+      "description": "User's life roadmap moments"
+    }
+  }
+}

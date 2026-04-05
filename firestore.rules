@@ -1,0 +1,92 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // ইউজারের ইমেইল ভেরিফাইড কিনা এবং সে অ্যাডমিন কিনা চেক করা
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "hossainalhamim19@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.size() < 256 && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidString(val, maxLen) {
+      return val is string && val.size() <= maxLen;
+    }
+
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    // ===============================================================
+    // Domain Validators (Strict Schema Enforcement)
+    // ===============================================================
+
+    function isValidUser(data) {
+      return isValidString(data.id, 128) &&
+             isValidString(data.name, 100) &&
+             isValidEmail(data.email) &&
+             (!('avatar' in data) || isValidString(data.avatar, 2048));
+    }
+
+    function isValidHabit(data) {
+      return isValidString(data.id, 128) && 
+             isValidString(data.name, 100) &&
+             isValidString(data.category, 50) &&
+             data.targetDays in [15, 30, 45, 75] && 
+             data.active is bool && 
+             data.history is map &&
+             isValidString(data.createdAt, 50);
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      // ইউজার শুধুমাত্র নিজের প্রোফাইল পড়তে ও লিখতে পারবে
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data) && areImmutableFieldsUnchanged(['id', 'email']);
+
+      // সাব-কালেকশনগুলো শুধুমাত্র মালিকের জন্য
+      match /{allSubcollections=**} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      // নির্দিষ্ট কালেকশন ভ্যালিডেশন
+      match /habits/{id} {
+        allow create: if isOwner(userId) && isValidHabit(request.resource.data);
+        allow update: if isOwner(userId) && isValidHabit(request.resource.data) && areImmutableFieldsUnchanged(['id', 'createdAt']);
+      }
+      
+      match /studySessions/{id} {
+        allow create: if isOwner(userId) && request.resource.data.duration is number;
+      }
+
+      match /transactions/{id} {
+        allow create: if isOwner(userId) && request.resource.data.amount is number;
+      }
+    }
+
+    // অন্য সব কিছু ব্লক
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
